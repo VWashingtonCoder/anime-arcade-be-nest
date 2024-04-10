@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  console.log('Seeding database...🌱');
   const adminAndre = await prisma.user.upsert({
     where: { id: 1 },
     update: {},
@@ -39,8 +40,9 @@ async function main() {
     },
   });
 
-  console.log(`Users created: ${adminAndre.username}, ${testUser.username}`);
-  console.log(`Game created: ${gameMemory.name}`);
+  console.log(`Created users: ${adminAndre.name}, ${testUser.name}`);
+  console.log(`Created game: ${gameMemory.name}`);
+  console.log(`Seeding completed!🌱`);
 }
 
 main()
