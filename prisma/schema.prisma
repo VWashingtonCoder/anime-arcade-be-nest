@@ -19,7 +19,7 @@ model User {
   email     String   @unique
   name      String
   password  String
-  role      String
+  role      Role     
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   scores    Score[]
@@ -42,4 +42,9 @@ model Score {
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
   createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
 }
