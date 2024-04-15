@@ -26,7 +26,7 @@ async function main() {
       email: '',
       name: 'Test User',
       password: 'ArcAD3Mast3R',
-      role: 'ADMIN',
+      role: 'USER',
     },
   });
 
