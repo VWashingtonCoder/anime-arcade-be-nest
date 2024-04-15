@@ -9,7 +9,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Username' + error.isNotEmpty })
   username: string;
 
-  @IsEmail({ message: 'Email must be a valid email address' })
+  @IsEmail()
   @IsNotEmpty({ message: 'Email ' + error.isNotEmpty })
   email: string;
 
