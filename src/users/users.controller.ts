@@ -6,15 +6,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersController {
   constructor(private readonly prisma: PrismaService) {}
 
-  @Post('login') 
-  create(@Body() userInfo) {
-    return console.log(this.prisma);
+  @Get() // ADMIN Route: Get all users
+  findAll() {
+    const dbUsers = this.prisma.user.findMany();
+    const users = dbUsers.then((users) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return users.map(({ password, ...user }) => user);
+    });
+    return users;
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.usersService.findAll();
+
+  // @Post('login') 
+  // create(@Body() userInfo) {
+  //   return console.log(this.prisma);
   // }
+
+  
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
