@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -57,23 +58,18 @@ export class UsersController {
     return newUser;
   }
 
-  // @Post('login')
-  // create(@Body() userInfo) {
-  //   return console.log(this.prisma);
-  // }
+  @Patch(':id') // Public Route: Update a user (password specifically)
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id: Number(id) },
+      data: updateUserDto,
+    });
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.usersService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.prisma.user.delete({
+      where: { id: Number(id) },
+    });
+  }
 }
