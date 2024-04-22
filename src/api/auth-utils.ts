@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserEntity } from 'src/users/entities/create-user.entity';
 
 export const hashPassword = async (password: string) => {
-  return await bcrypt.hash(password, 12);
+  return bcrypt.hash(password, 12);
 };
 
 export const verifyPassword = async (
@@ -13,12 +13,12 @@ export const verifyPassword = async (
   return await bcrypt.compare(password, hashedPassword);
 };
 
-export const unsecureUserForToken = (user: CreateUserDto) => {
+export const unsecureUserForToken = (user: CreateUserEntity) => {
   const { password, ...userForToken } = user;
   return userForToken;
 };
 
-export const generateToken = (user: CreateUserDto) => {
+export const generateToken = (user: CreateUserEntity) => {
   return jwt.sign(unsecureUserForToken(user), process.env.JWT_SECRET);
 };
 
