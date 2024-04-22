@@ -6,14 +6,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
+  
+  findAll() {
+    return this.prisma.user.findMany();
+  }
 
   // create(createUserDto: CreateUserDto) {
   //   return 'This action adds a new user';
   // }
 
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} user`;

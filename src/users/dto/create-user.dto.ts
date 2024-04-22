@@ -4,6 +4,7 @@ const error = {
   isString: 'must be a string',
   isNotEmpty: 'must not be empty',
 };
+
 export class CreateUserDto {
   @IsString({ message: 'Username ' + error.isString })
   @IsNotEmpty({ message: 'Username' + error.isNotEmpty })

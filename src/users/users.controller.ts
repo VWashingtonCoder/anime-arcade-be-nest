@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query, 
+  ParseIntPipe, 
+  ValidationPipe
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { CreateUserEntity } from './entities/create-user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
@@ -30,8 +33,8 @@ export class UsersController {
   }
 
   @Post('create') // PUBLIC Route: Create a new user
-  @ApiCreatedResponse({ type: UserEntity })
-  create(@Body() userInfo: CreateUserDto) {
+  @ApiCreatedResponse({ type: CreateUserEntity })
+  create(@Body(ValidationPipe) userInfo: CreateUserEntity) {
     const { username, email } = userInfo;
 
     const existingUsername = this.prisma.user.findUnique({
@@ -39,6 +42,7 @@ export class UsersController {
         username,
       },
     });
+
     if (existingUsername) {
       return {
         error: 'Username already exists',
