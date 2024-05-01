@@ -8,12 +8,14 @@ import {
   Delete,
   Query, 
   ParseIntPipe, 
-  ValidationPipe
+  ValidationPipe,
+  UseGuards
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserEntity } from './entities/create-user.entity';
 import { UsersService } from './users.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -21,6 +23,7 @@ export class UsersController {
   constructor(private readonly user: UsersService) {}
 
   @Get() // ADMIN Route: Get all users
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
     return this.user.findAll()
