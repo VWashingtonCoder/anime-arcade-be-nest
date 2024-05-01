@@ -13,8 +13,6 @@ import {
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserEntity } from './entities/create-user.entity';
-import { AuthEntity } from '../auth/entity/auth.entity';
-import { LoginDto } from '../auth/dto/login.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
