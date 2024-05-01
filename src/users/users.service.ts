@@ -1,11 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserEntity } from './entities/create-user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { hashPassword } from '../api/auth-utils';
+import { JwtService } from '@nestjs/jwt';
+import { AuthEntity } from './entities/auth.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private jwtService:JwtService) {}
+
+  async login(email: string, password: string): Promise<AuthEntity> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    if (user.password !== password)
+      throw new UnauthorizedException('Invalid password');
+
+    const payload = { 
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
+  }
 
   async findAll() {
     return this.prisma.user.findMany();
@@ -28,7 +58,7 @@ export class UsersService {
       },
     });
 
-    if(existingEmail) return 'Email already exists';
+    if (existingEmail) return 'Email already exists';
 
     const newUser = await this.prisma.user.create({
       data: {
