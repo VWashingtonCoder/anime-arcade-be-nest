@@ -5,8 +5,11 @@ import {
 } from '@nestjs/common';
 import { CreateUserEntity } from './entities/create-user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-import { AuthEntity } from '../auth/entity/auth.entity';
+import { hash } from 'bcryptjs';
+
+function hashPassword(password: string) {
+  return hash(password, 10);
+}
 
 @Injectable()
 export class UsersService {
@@ -18,6 +21,9 @@ export class UsersService {
 
   async create(user: CreateUserEntity) {
     const { username, email, role } = user;
+
+    user.password = await hashPassword(user.password);
+    user.role = role || 'USER';
 
     const existingUsername = await this.prisma.user.findUnique({
       where: {
@@ -36,10 +42,7 @@ export class UsersService {
     if (existingEmail) return 'Email already exists';
 
     const newUser = await this.prisma.user.create({
-      data: {
-        ...user,
-        role: role || 'USER',
-      },
+      data: user,
     });
 
     return newUser;
