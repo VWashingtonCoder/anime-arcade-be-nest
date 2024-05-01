@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Anime Arcade API')
     .setDescription('The Anime Arcade API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

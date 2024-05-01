@@ -6,12 +6,17 @@ import {
   Patch,
   Param,
   Delete,
-  Query, 
-  ParseIntPipe, 
+  Query,
+  ParseIntPipe,
   ValidationPipe,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserEntity } from './entities/create-user.entity';
 import { UsersService } from './users.service';
@@ -24,9 +29,10 @@ export class UsersController {
 
   @Get() // ADMIN Route: Get all users
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
-    return this.user.findAll()
+    return this.user.findAll();
   }
 
   @Post('create') // PUBLIC Route: Create a new user
