@@ -1,6 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcryptjs';
 
 const prisma = new PrismaClient();
+const adminPassword = process.env.SEED_ADMIN_PASSWORD || '';
+const userPassword = process.env.SEED_USER_PASSWORD || '';
+
+function hashPassword(password: string) {
+  return hash(password, 10);
+}
 
 async function main() {
   console.log('Seeding database...🌱');
@@ -12,7 +19,7 @@ async function main() {
       username: 'admin_andre',
       email: 'andre@gmail.com',
       name: 'Andre',
-      password: 'ArcAD3Mast3R',
+      password: await hashPassword(adminPassword),
       role: 'ADMIN',
     },
   });
@@ -25,7 +32,7 @@ async function main() {
       username: 'test_user',
       email: '',
       name: 'Test User',
-      password: 'ArcAD3Mast3R',
+      password: await hashPassword(userPassword),
       role: 'USER',
     },
   });
