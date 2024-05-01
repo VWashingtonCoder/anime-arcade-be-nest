@@ -13,8 +13,8 @@ import {
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserEntity } from './entities/create-user.entity';
-import { AuthEntity } from './entities/auth.entity';
-import { LoginDto } from './dto/login.dto';
+import { AuthEntity } from '../auth/entity/auth.entity';
+import { LoginDto } from '../auth/dto/login.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -26,12 +26,6 @@ export class UsersController {
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
     return this.user.findAll()
-  }
-
-  @Post("login") // PUBLIC Route: Login a user
-  @ApiOkResponse({ type: AuthEntity })
-  login(@Body(ValidationPipe) loginDto: LoginDto) {
-    return this.user.login(loginDto.email, loginDto.password);
   }
 
   @Post('create') // PUBLIC Route: Create a new user
