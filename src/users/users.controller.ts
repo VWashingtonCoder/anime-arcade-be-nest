@@ -44,15 +44,16 @@ export class UsersController {
 
   @Patch(':id') // Public Route: Update a user (password specifically)
   @ApiOkResponse({ type: UpdateUserDto })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.user.update(id, updateUserDto);
   }
 
-  // @Delete(':id')
-  // @ApiOkResponse({ type: UserEntity })
-  // remove(@Param('id') id: string) {
-  //   return this.prisma.user.delete({
-  //     where: { id: Number(id) },
-  //   });
-  // }
+  @Delete(':id')
+  @ApiOkResponse({ type: UserEntity })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.user.remove(id);
+  }
 }

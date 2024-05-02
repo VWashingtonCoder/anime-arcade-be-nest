@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'bcryptjs';
+import { UserEntity } from './entities/user.entity';
 
 function hashPassword(password: string) {
   return hash(password, 10);
@@ -16,7 +17,7 @@ function hashPassword(password: string) {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  findAll() {
     return this.prisma.user.findMany();
   }
 
@@ -49,11 +50,28 @@ export class UsersService {
     return newUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (updateUserDto.password) {
+      user.password = await hashPassword(updateUserDto.password);
+    }
+
+    if (updateUserDto.email) {
+      user.email = updateUserDto.email;
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: user,
+    });
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  remove(id: number) {
+    return this.prisma.user.delete({
+      where: { id },
+    });
+  }
 }
