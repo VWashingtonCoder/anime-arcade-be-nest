@@ -21,11 +21,11 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async create(user: CreateUserDto) {
-    const { username, email, role } = user;
+  async create(newUser: CreateUserDto) {
+    const { username, email, role } = newUser;
 
-    user.password = await hashPassword(user.password);
-    user.role = role || 'USER';
+    newUser.password = await hashPassword(newUser.password);
+    newUser.role = role || 'USER';
 
     const existingUsername = await this.prisma.user.findUnique({
       where: {
@@ -43,11 +43,11 @@ export class UsersService {
 
     if (existingEmail) return 'Email already exists';
 
-    const newUser = await this.prisma.user.create({
-      data: user,
+    const createUser = await this.prisma.user.create({
+      data: newUser,
     });
 
-    return newUser;
+    return createUser;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

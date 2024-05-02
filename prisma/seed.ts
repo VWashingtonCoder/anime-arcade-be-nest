@@ -30,7 +30,7 @@ async function main() {
     create: {
       id: 2,
       username: 'test_user',
-      email: '',
+      email: 'testUser@gmail.com',
       name: 'Test User',
       password: await hashPassword(userPassword),
       role: 'USER',

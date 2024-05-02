@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsEnum,
   MinLength,
+  IsOptional,
 } from 'class-validator';
 
 const required = { required: true, nullable: false };
@@ -37,6 +38,6 @@ export class CreateUserDto {
   password: string;
 
   @IsEnum(['ADMIN', 'USER'], { message: 'Role must be either ADMIN or USER' })
-  @ApiProperty()
+  @ApiProperty({ required: false, default: 'USER' })
   role: 'ADMIN' | 'USER';
 }
