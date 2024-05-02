@@ -3,7 +3,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserEntity } from './entities/create-user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'bcryptjs';
 
@@ -19,7 +20,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async create(user: CreateUserEntity) {
+  async create(user: CreateUserDto) {
     const { username, email, role } = user;
 
     user.password = await hashPassword(user.password);
@@ -48,13 +49,9 @@ export class UsersService {
     return newUser;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  update(id: number, updateUserDto: UpdateUserDto) {
+    return `This action updates a #${id} user`;
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} user`;

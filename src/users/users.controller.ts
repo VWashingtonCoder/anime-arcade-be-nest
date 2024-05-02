@@ -18,7 +18,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserEntity } from './entities/create-user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
@@ -36,19 +37,16 @@ export class UsersController {
   }
 
   @Post('create') // PUBLIC Route: Create a new user
-  @ApiCreatedResponse({ type: CreateUserEntity })
-  create(@Body(ValidationPipe) user: CreateUserEntity) {
+  @ApiCreatedResponse({ type: CreateUserDto })
+  create(@Body() user: CreateUserDto) {
     return this.user.create(user);
   }
 
-  // @Patch(':id') // Public Route: Update a user (password specifically)
-  // @ApiOkResponse({ type: UserEntity })
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.prisma.user.update({
-  //     where: { id: Number(id) },
-  //     data: updateUserDto,
-  //   });
-  // }
+  @Patch(':id') // Public Route: Update a user (password specifically)
+  @ApiOkResponse({ type: UpdateUserDto })
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.user.update(id, updateUserDto);
+  }
 
   // @Delete(':id')
   // @ApiOkResponse({ type: UserEntity })

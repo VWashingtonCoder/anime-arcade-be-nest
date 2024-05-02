@@ -5,16 +5,16 @@ export class UserEntity implements User {
   @ApiProperty()
   id: number;
 
-  @ApiProperty({ required: true, nullable: false })
+  @ApiProperty()
   username: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @ApiProperty()
   email: string;
 
   @ApiProperty()
   name: string;
 
-  @ApiProperty({ required: true, nullable: false })
+  @ApiProperty()
   password: string;
 
   @ApiProperty()
