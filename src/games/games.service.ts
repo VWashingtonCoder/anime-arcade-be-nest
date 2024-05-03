@@ -7,22 +7,35 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class GamesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createGameDto: CreateGameDto) {
-    return 'This action adds a new game';
-  }
-
+  // Get Game List
   findAll() {
-    return `This action returns all games`;
+    return this.prisma.game.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
+  // Create Game
+  async create(newGame: CreateGameDto) {
+    const { name } = newGame;
+    const existingGameName = await this.prisma.game.findUnique({
+      where: {
+        name,
+      },
+    });
+
+    if (existingGameName) return 'Game name already exists';
+
+    const createGame = await this.prisma.game.create({
+      data: newGame,
+    });
+
+    return createGame;
   }
 
+  // Update Game Details
   update(id: number, updateGameDto: UpdateGameDto) {
     return `This action updates a #${id} game`;
   }
 
+  // Delete Game
   remove(id: number) {
     return `This action removes a #${id} game`;
   }

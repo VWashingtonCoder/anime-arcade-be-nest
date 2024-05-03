@@ -6,7 +6,6 @@ import {
   IsEnum,
   MaxLength,
   MinLength,
-  IsOptional,
 } from 'class-validator';
 
 const required = { required: true, nullable: false };
