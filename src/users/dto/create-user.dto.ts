@@ -4,20 +4,27 @@ import {
   IsEmail,
   IsNotEmpty,
   IsEnum,
+  MaxLength,
   MinLength,
   IsOptional,
 } from 'class-validator';
 
 const required = { required: true, nullable: false };
+
 const error = {
-  string: ' must be a string',
-  empty: ' must not be empty',
+  string: (property: string) => `${property} must be a string`,
+  empty: (property: string) => `${property} must not be empty`,
+  min: (property: string, length: number) =>
+    `${property} must be at least ${length} characters long`,
+  max: (property: string, length: number) =>
+    `${property} must be at most ${length} characters long`,
 };
 
 export class CreateUserDto {
-  @IsString({ message: `Username ${error.string}` })
-  @IsNotEmpty({ message: `Username ${error.empty}` })
-  @MinLength(4, { message: 'Username must be at least 4 characters long' })
+  @IsString({ message: error.string('Username') })
+  @IsNotEmpty({ message: error.empty('Username') })
+  @MinLength(4, { message: error.min('Username', 4) })
+  @MaxLength(20, { message: error.max('Username', 20) })
   @ApiProperty(required)
   username: string;
 
@@ -25,15 +32,17 @@ export class CreateUserDto {
   @ApiProperty(required)
   email: string;
 
-  @IsString({ message: `Name ${error.string}` })
-  @IsNotEmpty({ message: `Name ${error.empty}` })
-  @MinLength(2, { message: 'Name must be at least 2 characters long' })
+  @IsString({ message: error.string('Name') })
+  @IsNotEmpty({ message: error.empty('Name') })
+  @MinLength(2, { message: error.min('Name', 2) })
+  @MaxLength(50, { message: error.max('Name', 50) })
   @ApiProperty(required)
   name: string;
 
-  @IsString({ message: `Password ${error.string}` })
-  @IsNotEmpty({ message: `Password ${error.empty}` })
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @IsString({ message: error.string('Password') })
+  @IsNotEmpty({ message: error.empty('Password') })
+  @MinLength(8, { message: error.min('Password', 8) })
+  @MaxLength(50, { message: error.max('Password', 50) })
   @ApiProperty(required)
   password: string;
 
