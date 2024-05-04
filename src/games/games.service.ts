@@ -88,6 +88,6 @@ export class GamesService {
       },
     });
 
-    return `${deleteGame.name} at id #${id} has been deleted`;
+    return deleteGame;
   }
 }
