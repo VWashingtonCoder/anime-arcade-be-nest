@@ -73,7 +73,21 @@ export class GamesService {
   }
 
   // Delete Game
-  remove(id: number) {
-    return `This action removes a #${id} game`;
+  async remove(id: number) {
+    const gameDetails = await this.prisma.game.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!gameDetails) throw new NotFoundException('Game not found with id ' + id)
+
+    const deleteGame = await this.prisma.game.delete({
+      where: {
+        id,
+      },
+    });
+
+    return `${deleteGame.name} at id #${id} has been deleted`;
   }
 }
