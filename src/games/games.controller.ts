@@ -35,10 +35,9 @@ export class GamesController {
   @Post() // POST Create Game (Admin)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: CreateGameDto })
+  @ApiCreatedResponse({ type: CreateGameDto })
   create(@Body() createGameDto: CreateGameDto) {
-    console.log(createGameDto);
-    // return this.gamesService.create(createGameDto);
+    return this.gamesService.create(createGameDto);
   }
 
   @Patch(':id') // PATCH Update Game Details (Admin)
