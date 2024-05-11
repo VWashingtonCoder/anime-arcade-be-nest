@@ -1,26 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateScoreDto } from './dto/create-score.dto';
-import { UpdateScoreDto } from './dto/update-score.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ScoresService {
+  constructor(private prisma: PrismaService) {}
+
   create(createScoreDto: CreateScoreDto) {
-    return 'This action adds a new score';
+    const newScore = this.prisma.score.create({
+      data: createScoreDto,
+    });
+
+    if (newScore) return newScore;
+    else throw new UnauthorizedException('ERROR: Score not created');
   }
 
   findAll() {
-    return `This action returns all scores`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} score`;
-  }
-
-  update(id: number, updateScoreDto: UpdateScoreDto) {
-    return `This action updates a #${id} score`;
+    const scores = this.prisma.score.findMany();
+    if (scores) return scores;
+    else throw new NotFoundException('No scores found');
   }
 
   remove(id: number) {
-    return `This action removes a #${id} score`;
+    const removedScore = this.prisma.score.delete({
+      where: { id },
+    });
+
+    if (removedScore) return removedScore;
+    else throw new NotFoundException('Score not found');
   }
 }

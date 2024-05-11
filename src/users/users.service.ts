@@ -2,12 +2,12 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  BadRequestException
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'bcryptjs';
-import { UserEntity } from './entities/user.entity';
 
 function hashPassword(password: string) {
   return hash(password, 10);
@@ -33,7 +33,7 @@ export class UsersService {
       },
     });
 
-    if (existingUsername) return 'Username already exists';
+    if (existingUsername) throw new BadRequestException('Username already exists');
 
     const existingEmail = await this.prisma.user.findUnique({
       where: {
@@ -41,13 +41,14 @@ export class UsersService {
       },
     });
 
-    if (existingEmail) return 'Email already exists';
+    if (existingEmail) throw new BadRequestException('Email already exists');
 
     const createUser = await this.prisma.user.create({
       data: newUser,
     });
 
-    return createUser;
+    if (createUser) return createUser;
+    else throw new UnauthorizedException('ERROR: User not created');
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
