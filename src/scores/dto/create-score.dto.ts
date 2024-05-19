@@ -1,16 +1,19 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
-import { ScoreEntity } from '../entities/score.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateScoreDto extends ScoreEntity {
+export class CreateScoreDto {
   @IsNumber()
   @IsNotEmpty()
+  @ApiProperty()
   score: number;
 
   @IsNumber()
   @IsNotEmpty()
+  @ApiProperty()
   gameId: number;
 
   @IsNumber()
   @IsNotEmpty()
+  @ApiProperty()
   userId: number;
 }

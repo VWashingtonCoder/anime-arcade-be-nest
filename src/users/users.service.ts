@@ -17,8 +17,10 @@ function hashPassword(password: string) {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    if (users) return users;
+    else throw new NotFoundException('No users found');
   }
 
   async create(newUser: CreateUserDto) {

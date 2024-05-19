@@ -11,8 +11,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ScoresService {
   constructor(private prisma: PrismaService) {}
 
-  create(createScoreDto: CreateScoreDto) {
-    const newScore = this.prisma.score.create({
+  async create(createScoreDto: CreateScoreDto) {
+    const newScore = await this.prisma.score.create({
       data: createScoreDto,
     });
 
@@ -20,14 +20,14 @@ export class ScoresService {
     else throw new UnauthorizedException('ERROR: Score not created');
   }
 
-  findAll() {
-    const scores = this.prisma.score.findMany();
+  async findAll() {
+    const scores = await this.prisma.score.findMany();
     if (scores) return scores;
     else throw new NotFoundException('No scores found');
   }
 
-  remove(id: number) {
-    const removedScore = this.prisma.score.delete({
+  async remove(id: number) {
+    const removedScore = await this.prisma.score.delete({
       where: { id },
     });
 
